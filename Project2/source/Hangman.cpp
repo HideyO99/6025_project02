@@ -14,10 +14,17 @@ Hangman::~Hangman()
 {
 }
 
+//////////////////////////////////////////////////////////////
+//															//
+// run : set languge to english and loop until user exit  	//
+// input param : none										//
+//															//
+//////////////////////////////////////////////////////////////
 void Hangman::run()
 {
 	std::string input;
 	messageList_.loadLangSetFromXML("lang_en");
+	lang_ = "lang_en";
 	
 	while (1)
 	{
@@ -41,6 +48,12 @@ void Hangman::run()
 	}
 }
 
+//////////////////////////////////////////////////////////////
+//															//
+// newGame : set new game state	machine and random word 	//
+// input param : none										//
+//															//
+//////////////////////////////////////////////////////////////
 bool Hangman::newGame()
 {
 
@@ -62,6 +75,21 @@ bool Hangman::newGame()
 	return true;
 }
 
+//////////////////////////////////////////////////////////////
+//															//
+// getInput :	check user input and update state machine	//
+//					\s to save								//
+//					\l to load								//
+//					\e to exit								//
+//					\n to new game							//
+//					\1 to set language to english			//
+//					\2 to set language to german			//
+//					\3 to set language to french			//
+//				The input key will set to uppercase and 	//
+//				throw back									//
+// input param :uInput  <- throw back the input to caller	//
+//															//
+//////////////////////////////////////////////////////////////
 bool Hangman::getInput(std::string& uInput)
 {
 	std::string input;
@@ -76,6 +104,8 @@ bool Hangman::getInput(std::string& uInput)
 	{
 		//load state
 		result_ = loadState();
+		messageList_.xmlmssglist.clear();
+		messageList_.loadLangSetFromXML(lang_.c_str());
 	}
 	else if (input == "\\n" || input == "\\N")
 	{
@@ -90,18 +120,21 @@ bool Hangman::getInput(std::string& uInput)
 		//load english
 		messageList_.xmlmssglist.clear();
 		messageList_.loadLangSetFromXML("lang_en");
+		lang_ = "lang_en";
 	}
 	else if (input == "\\2" )
 	{
 		//load german
 		messageList_.xmlmssglist.clear();
 		messageList_.loadLangSetFromXML("lang_de");
+		lang_ = "lang_de";
 	}
 	else if (input == "\\3")
 	{
 		//load french
 		messageList_.xmlmssglist.clear();
 		messageList_.loadLangSetFromXML("lang_fr");
+		lang_ = "lang_fr";
 	}
 	else if (isalpha(input.front()))
 	{
@@ -110,10 +143,6 @@ bool Hangman::getInput(std::string& uInput)
 			//std::cout << "please start new game" << std::endl; //todo load msg from xml
 			return true;
 		}
-		//if (input.size() > 1)
-		//{
-		//	std::cout << "only first character accepted"<<std::endl; //todo load msg from xml
-		//}
 
 		uInput = toupper(input.front());
 	}
@@ -125,7 +154,14 @@ bool Hangman::getInput(std::string& uInput)
 
 	return true;
 }
-//random select word from list.txt
+
+//////////////////////////////////////////////////////////////////////
+//																	//
+// randWordList :	open wordlist file and random the word			//
+// input param :	wordSelected <- throw back word selected		//
+//					to caller										//
+//																	//
+//////////////////////////////////////////////////////////////////////
 bool Hangman::randWordList(std::string& wordSelected)
 {
 	
@@ -150,6 +186,12 @@ bool Hangman::randWordList(std::string& wordSelected)
 	return false;
 }
 
+//////////////////////////////////////////////////////////////////////
+//																	//
+// isOK :	check status from result_								//
+// input param :	none											//
+//																	//
+//////////////////////////////////////////////////////////////////////
 void Hangman::isOK()
 {
 	if (!result_)
@@ -160,6 +202,13 @@ void Hangman::isOK()
 	}
 }
 
+//////////////////////////////////////////////////////////////////////
+//																	//
+// checkWord :	check input and put it into map to keep input		//
+//				history												//
+// input param : string	input										//
+//																	//
+//////////////////////////////////////////////////////////////////////
 bool Hangman::checkWord(const std::string input)
 {
 	if (input_.find(input) == input_.end())
@@ -208,6 +257,12 @@ bool Hangman::checkWord(const std::string input)
 	return true;
 }
 
+//////////////////////////////////////////////////////////////////////
+//																	//
+// checklive :	check remain live									//
+// input param : none												//
+//																	//
+//////////////////////////////////////////////////////////////////////
 void Hangman::checklive()
 {
 	if (live_ <= 0)
@@ -217,6 +272,12 @@ void Hangman::checklive()
 	}
 }
 
+//////////////////////////////////////////////////////////////////////
+//																	//
+// saveState :	pass the state value to xml class					//
+// input param : none												//
+//																	//
+//////////////////////////////////////////////////////////////////////
 bool Hangman::saveState()
 {
 	//parser data to xml obj
@@ -228,10 +289,18 @@ bool Hangman::saveState()
 	savedata.xml_foundPos = foundPos;
 	savedata.xml_myWord = myWord;
 	savedata.xml_input_ = input_;
+	savedata.xml_lang_ = lang_;
 
 	return saveFile_.saveState(savedata);
 }
 
+//////////////////////////////////////////////////////////////////////
+//																	//
+// saveState :	call xml to load state and set it back to internal	//
+//				variable											//
+// input param : none												//
+//																	//
+//////////////////////////////////////////////////////////////////////
 bool Hangman::loadState()
 {
 	XML::saveData savedata;
@@ -244,9 +313,17 @@ bool Hangman::loadState()
 	foundPos = savedata.xml_foundPos;
 	myWord = savedata.xml_myWord;
 	input_ = savedata.xml_input_;
-	return false;
+	lang_ = savedata.xml_lang_;
+
+	return true;
 }
 
+//////////////////////////////////////////////////////////////////////
+//																	//
+// toCapital :	set word to capital letter							//
+// input param : string s											//
+//																	//
+//////////////////////////////////////////////////////////////////////
 void Hangman::toCapital(std::string& s)
 {
 	for (size_t i = 0; i < s.size(); i++)
@@ -255,6 +332,12 @@ void Hangman::toCapital(std::string& s)
 	}
 }
 
+//////////////////////////////////////////////////////////////////////
+//																	//
+// print :	print screen											//
+// input param : live												//
+//																	//
+//////////////////////////////////////////////////////////////////////
 bool Hangman::print(int live)
 {
 	system("cls");

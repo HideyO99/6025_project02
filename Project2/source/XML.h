@@ -18,9 +18,11 @@ public:
 		int xml_gameState_;
 		int xml_errorStatus_;
 		int xml_live_;
+		std::string xml_lang_;
 		std::map<size_t, std::string> xml_foundPos;
 		std::map<size_t, std::string> xml_myWord;
 		std::map<std::string, size_t> xml_input_;
+
 	};
 
 	bool loadLangSetFromXML(const pugi::char_t* langSet);

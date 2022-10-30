@@ -1,33 +1,42 @@
 <?xml version="1.0"?>
 <saved>
-	<theWord>REFUND</theWord>
+	<theWord>GALLON</theWord>
 	<gameState_>2</gameState_>
 	<errorStatus_>3</errorStatus_>
-	<live_>8</live_>
+	<live_>6</live_>
+	<lang_>lang_de</lang_>
 	<foundPos>
-		<key>0<value>R</value>
+		<key>1<value>A</value>
 		</key>
-		<key>5<value>D</value>
+		<key>4<value>O</value>
+		</key>
+		<key>5<value>N</value>
 		</key>
 	</foundPos>
 	<myWord>
-		<key>0<value>R</value>
+		<key>0<value>_</value>
 		</key>
-		<key>1<value>_</value>
+		<key>1<value>A</value>
 		</key>
 		<key>2<value>_</value>
 		</key>
 		<key>3<value>_</value>
 		</key>
-		<key>4<value>_</value>
+		<key>4<value>O</value>
 		</key>
-		<key>5<value>D</value>
+		<key>5<value>N</value>
 		</key>
 	</myWord>
 	<input_>
 		<key>A<value>0</value>
 		</key>
-		<key>D<value>0</value>
+		<key>E<value>0</value>
+		</key>
+		<key>I<value>0</value>
+		</key>
+		<key>N<value>0</value>
+		</key>
+		<key>O<value>0</value>
 		</key>
 		<key>R<value>0</value>
 		</key>

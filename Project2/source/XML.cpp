@@ -9,6 +9,12 @@ XML::~XML()
 {
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//																								//
+// loadLangSetFromXML :	open locale.xml which contain words in each language to show up in game	//
+// input param :	langSet 																	//
+//																								//
+//////////////////////////////////////////////////////////////////////////////////////////////////
 bool XML::loadLangSetFromXML(const pugi::char_t* langSet)
 {
 	pugi::xml_document locale_xml;
@@ -41,6 +47,12 @@ bool XML::loadLangSetFromXML(const pugi::char_t* langSet)
 	return true;
 }
 
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//																								//
+// saveState :	write game state to saved.xml													//
+// input param :	savedata <- which passed from hangman class									//
+//																								//
+//////////////////////////////////////////////////////////////////////////////////////////////////
 bool XML::saveState(saveData savedata)
 {
 	pugi::xml_document saved_xml;
@@ -56,6 +68,9 @@ bool XML::saveState(saveData savedata)
 
 	pugi::xml_node slive = saved.append_child("live_");
 	slive.append_child(pugi::node_pcdata).set_value(std::to_string(savedata.xml_live_).c_str());
+
+	pugi::xml_node slang = saved.append_child("lang_");
+	slang.append_child(pugi::node_pcdata).set_value(savedata.xml_lang_.c_str());
 
 	pugi::xml_node sfoundPos = saved.append_child("foundPos");
 	std::map<size_t, std::string>::iterator foundPos_it;
@@ -93,13 +108,18 @@ bool XML::saveState(saveData savedata)
 	return true;
 }
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////////
+//																								//
+// loadState :	load game state from saved.xml													//
+// input param :	savedata <- thow back data to hangman class									//
+//																								//
+//////////////////////////////////////////////////////////////////////////////////////////////////
 bool XML::loadState(saveData* savedata )
 {
 	pugi::xml_document doc;
 	pugi::xml_parse_result result = doc.load_file("saved.xml");
 	std::vector<std::string> buf;
-	std::map<std::string, std::string> buf_map[7];
+	std::map<std::string, std::string> buf_map[8];
 
 	if (!result)
 	{
@@ -120,12 +140,11 @@ bool XML::loadState(saveData* savedata )
 	{
 		std::string s;
 		pugi::xml_node datalist = *datalist_i;
-		int j = 0;
 
 		s = datalist.child_value();
 		if (s!="")
 		{
-			buf.push_back(datalist.child_value());
+			buf.push_back(datalist.child_value()); //store normal node element 
 		}
 		pugi::xml_node_iterator map_it;
 
@@ -145,33 +164,33 @@ bool XML::loadState(saveData* savedata )
 					m_data = map_data.child_value();
 					if (m_data != "")
 					{
-						vm_data.push_back(m_data);
+						vm_data.push_back(m_data); //store map value to temp vector
 					}
 
 				}
 				std::string data_pop = vm_data.front().c_str();
-				buf_map[i].emplace(m_key, data_pop);
-				//buf_map[i].emplace(m_key, vm_data.front().c_str());
+				buf_map[i].emplace(m_key, data_pop); // store map both key and value
 			}
-			j++;
 		}
 		i++;
 	}
-	//buf.
+
+	//set the read data to struct and hangman class will access later
 	savedata->xml_theWord = buf[0].c_str();
 	savedata->xml_gameState_ = std::stoi(buf[1].c_str());
 	savedata->xml_errorStatus_ = std::stoi(buf[2].c_str());
 	savedata->xml_live_ = std::stoi(buf[3].c_str());
+	savedata->xml_lang_ = buf[4].c_str();
 
-	for (auto const& pair : buf_map[4]) 
+	for (auto const& pair : buf_map[5]) 
 	{
 		savedata->xml_foundPos.emplace(std::stoi(pair.first), pair.second);
 	}
-	for (auto const& pair : buf_map[5])
+	for (auto const& pair : buf_map[6])
 	{
 		savedata->xml_myWord.emplace(std::stoi(pair.first), pair.second);
 	}
-	for (auto const& pair : buf_map[6])
+	for (auto const& pair : buf_map[7])
 	{
 		savedata->xml_input_.emplace(pair.first, std::stoi(pair.second));
 	}

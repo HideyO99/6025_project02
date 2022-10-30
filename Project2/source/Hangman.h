@@ -67,6 +67,7 @@ private:
 	std::map<size_t, std::string> foundPos;
 	std::map<size_t, std::string> myWord;
 	std::map<std::string, size_t> input_;
+	std::string lang_;
 };
 
 template<typename K, typename V>
