@@ -8,6 +8,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include <windows.h>
+#include "XML.h"
 
 #define WORDLIST "list.txt"
 
@@ -24,8 +25,12 @@ public:
 	void isOK(); 
 	bool checkWord(const std::string input);
 	void checklive();
+	bool saveState();
+	bool loadState();
 
 	bool result_;
+	XML messageList_;
+	XML saveFile_;
 	
 
 private:
@@ -34,9 +39,6 @@ private:
 	bool print(int live);
 	template<typename K, typename V>
 	void print_map(std::map<K, V> const& m, bool printFirst);
-
-
-
 
 	enum gameState
 	{
@@ -57,6 +59,7 @@ private:
 		ERROR_NOTFOUND,
 		ERROR_UNKNOW
 	};
+
 	std::string theWord;
 	gameState gameState_;
 	errorStatus errorStatus_;

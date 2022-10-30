@@ -1,0 +1,51 @@
+<?xml version = "1.0" encoding="UTF-8"?>
+<Localize>
+	<lang_en>
+		<newgane_txt lang="en">\n to start new game</newgane_txt>
+		<loadgame_txt lang="en">\l to load saved game</loadgame_txt>
+		<savegame_txt lang="en">\s to save state</savegame_txt>
+		<exitgame_txt lang="en">\e to exit game</exitgame_txt>
+		<guess_txt lang="en">Guess</guess_txt>
+		<input_txt lang="en">Your input:</input_txt>
+		<rule_txt lang="en">You can input many keys but only first character will accepted</rule_txt>
+		<win_txt lang="en">YOU WIN!!</win_txt>
+		<lose_txt lang="en">YOU LOSE!!</lose_txt>
+		<saved_txt lang="en">Save completed</saved_txt>
+		<loaded_txt lang="en">Loaded the last save</loaded_txt>
+		<alphabet_txt lang="en">Please input a-z only</alphabet_txt>
+		<dup_txt lang="en">Duplicated INPUT</dup_txt>
+		<incorrect_txt lang="en">incorrect</incorrect_txt>
+	</lang_en>
+	<lang_de>
+		<newgane_txt lang="de">\n um ein neues Spiel zu starten</newgane_txt>
+		<loadgame_txt lang="de">\l zum Laden des gespeicherten Spiels</loadgame_txt>
+		<savegame_txt lang="de">\s, um den Zustand zu speichern</savegame_txt>
+		<exitgame_txt lang="de">\e um das Spiel zu beenden</exitgame_txt>
+		<guess_txt lang="de">Erraten</guess_txt>
+		<input_txt lang="de">Deine Eingabe:</input_txt>
+		<rule_txt lang="de">Sie können viele Tasten eingeben, aber nur das erste Zeichen wird akzeptiert</rule_txt>
+		<win_txt lang="de">DU GEWINNST!!</win_txt>
+		<lose_txt lang="de">DU VERLIERST!!</lose_txt>
+		<saved_txt lang="de">Speicherung abgeschlossen</saved_txt>
+		<loaded_txt lang="de">Letzten Spielstand geladen</loaded_txt>
+		<alphabet_txt lang="de">Bitte nur a-z eingeben</alphabet_txt>
+		<dup_txt lang="de">Doppelte Eingabe</dup_txt>
+		<incorrect_txt lang="de">falsch</incorrect_txt>
+	</lang_de>
+	<lang_fr>
+		<newgane_txt lang="fr">\n pour démarrer une nouvelle partie</newgane_txt>
+		<loadgame_txt lang="fr">\l pour charger la partie sauvegardée</loadgame_txt>
+		<savegame_txt lang="fr">\s pour enregistrer l'état</savegame_txt>
+		<exitgame_txt lang="fr">\e pour quitter le jeu</exitgame_txt>
+		<guess_txt lang="fr">Deviner</guess_txt>
+		<input_txt lang="fr">Votre entrée :</input_txt>
+		<rule_txt lang="fr">Vous pouvez entrer plusieurs touches mais seul le premier caractère sera accepté</rule_txt>
+		<win_txt lang="fr">VOUS GAGNEZ!!</win_txt>
+		<lose_txt lang="fr">TU AS PERDU!!</lose_txt>
+		<saved_txt lang="fr">Sauvegarde terminée</saved_txt>
+		<loaded_txt lang="fr">Chargé la dernière sauvegarde</loaded_txt>
+		<alphabet_txt lang="fr">Veuillez entrer uniquement a-z</alphabet_txt>
+		<dup_txt lang="fr">ENTRÉE dupliquée</dup_txt>
+		<incorrect_txt lang="fr">incorrecte</incorrect_txt>
+	</lang_fr>
+</Localize>

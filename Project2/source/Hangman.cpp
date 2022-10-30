@@ -17,6 +17,7 @@ Hangman::~Hangman()
 void Hangman::run()
 {
 	std::string input;
+	messageList_.loadLangSetFromXML("lang_en");
 	
 	while (1)
 	{
@@ -69,10 +70,12 @@ bool Hangman::getInput(std::string& uInput)
 	if (input == "\\s" || input == "\\S")
 	{
 		//save state
+		result_ = saveState();
 	}
 	else if (input == "\\l" || input == "\\L")
 	{
 		//load state
+		result_ = loadState();
 	}
 	else if (input == "\\n" || input == "\\N")
 	{
@@ -85,38 +88,44 @@ bool Hangman::getInput(std::string& uInput)
 	else if (input == "\\1" )
 	{
 		//load english
+		messageList_.xmlmssglist.clear();
+		messageList_.loadLangSetFromXML("lang_en");
 	}
 	else if (input == "\\2" )
 	{
 		//load german
+		messageList_.xmlmssglist.clear();
+		messageList_.loadLangSetFromXML("lang_de");
 	}
 	else if (input == "\\3")
 	{
 		//load french
+		messageList_.xmlmssglist.clear();
+		messageList_.loadLangSetFromXML("lang_fr");
 	}
 	else if (isalpha(input.front()))
 	{
 		if (gameState_ != GAME_STARTED)
 		{
-			std::cout << "please start new game" << std::endl; //todo load msg from xml
+			//std::cout << "please start new game" << std::endl; //todo load msg from xml
 			return true;
 		}
-		if (input.size() > 1)
-		{
-			std::cout << "only first character accepted"<<std::endl; //todo load msg from xml
-		}
+		//if (input.size() > 1)
+		//{
+		//	std::cout << "only first character accepted"<<std::endl; //todo load msg from xml
+		//}
 
 		uInput = toupper(input.front());
 	}
 	else
 	{
-		std::cout << "Please input a-z only" << std::endl; //todo load msg from xml
+		//std::cout << "Please input a-z only" << std::endl; //todo load msg from xml
 		errorStatus_ = ERROR_INVALID_INPUT;
 	}
 
 	return true;
 }
-
+//random select word from list.txt
 bool Hangman::randWordList(std::string& wordSelected)
 {
 	
@@ -177,14 +186,14 @@ bool Hangman::checkWord(const std::string input)
 			
 			if (foundPos.size() == theWord.size())
 			{
-				std::cout << "win!!" << std::endl;
+				//std::cout << "win!!" << std::endl;
 				gameState_ = GAME_WIN;	
 				errorStatus_ = ERROR_NONE;
 			}
 		}
 		else
 		{
-			std::cout << "not find" << std::endl; //todo load msg from xml
+			//std::cout << "not find" << std::endl; //todo load msg from xml
 			live_--;
 			gameState_ = GAME_STARTED;
 			errorStatus_ = ERROR_NOTFOUND;
@@ -193,7 +202,7 @@ bool Hangman::checkWord(const std::string input)
 	}
 	else
 	{
-		std::cout << "duplicated input" << std::endl; // todo load msg from xml
+		//std::cout << "duplicated input" << std::endl; // todo load msg from xml
 		errorStatus_ = ERROR_DUPLICATED_INPUT;
 	}
 	return true;
@@ -203,9 +212,39 @@ void Hangman::checklive()
 {
 	if (live_ <= 0)
 	{
-		std::cout << "game over" << std::endl; //todo load msg from xml
+		//std::cout << "game over" << std::endl; //todo load msg from xml
 		gameState_ = GAME_OVER;
 	}
+}
+
+bool Hangman::saveState()
+{
+	//parser data to xml obj
+	XML::saveData savedata;
+	savedata.xml_theWord = theWord;
+	savedata.xml_gameState_ = gameState_;
+	savedata.xml_errorStatus_ = errorStatus_;
+	savedata.xml_live_ = live_;
+	savedata.xml_foundPos = foundPos;
+	savedata.xml_myWord = myWord;
+	savedata.xml_input_ = input_;
+
+	return saveFile_.saveState(savedata);
+}
+
+bool Hangman::loadState()
+{
+	XML::saveData savedata;
+	saveFile_.loadState(&savedata);
+
+	theWord = savedata.xml_theWord;
+	gameState_ = (gameState)savedata.xml_gameState_;
+	errorStatus_ = (errorStatus)savedata.xml_errorStatus_;
+	live_ = savedata.xml_live_;
+	foundPos = savedata.xml_foundPos;
+	myWord = savedata.xml_myWord;
+	input_ = savedata.xml_input_;
+	return false;
 }
 
 void Hangman::toCapital(std::string& s)
@@ -324,61 +363,64 @@ bool Hangman::print(int live)
 
 	if (gameState_ == GAME_NOTSTART)
 	{
-		std::cout << "\t\t\t\\n to start new game\t\t\t\\1:English" << std::endl;
-		std::cout << "\t\t\t\\l to load saved game\t\t\t\\2:Deutsch" << std::endl;
-		std::cout << "\t\t\t\\e to exit game \t\t\t\\3:francaise" << std::endl;
+		std::cout << "\t\t\t" << messageList_.xmlmssglist.at(0).data() << std::endl; //new game
+		std::cout << "\t\t\t" << messageList_.xmlmssglist.at(1).data() << std::endl; //load game
+		std::cout << "\t\t\t" << messageList_.xmlmssglist.at(3).data() << std::endl; //exit game
+		std::cout << "\t\t\t\\1:English" << std::endl;
+		std::cout << "\t\t\t\\2:Deutsch" << std::endl;
+		std::cout << "\t\t\t\\3:française" << std::endl;
 	}
 	else
 	{
 		std::cout << std::endl;
-		std::cout << "Guess:\t\t\t";
+		std::cout << messageList_.xmlmssglist.at(4).data() << "\t\t\t"; //guess
 		print_map(myWord, false);
 		std::cout << std::endl << std::endl;
-		std::cout << "Your input:\t\t\t";
+		std::cout << messageList_.xmlmssglist.at(5).data() << "\t\t\t"; //your input
 		print_map(input_, true);
 		std::cout << std::endl;
 
 		if (gameState_ == GAME_STARTED)
 		{
-			std::cout << "\t\t\t\\n to start new game\t\t\t\\1:English" << std::endl;
-			std::cout << "\t\t\t\\l to load saved game\t\t\t\\2:Deutsch" << std::endl;
-			std::cout << "\t\t\t\\s to save state\t\t\t\\3:française" << std::endl;
-			std::cout << "\t\t\t\\e to exit game" << std::endl;
-			std::cout << "\t\t\tYou can input many keys but only first character will accepted" << std::endl;
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(0).data() << std::endl; //new game
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(1).data() << std::endl; //load game
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(2).data() << std::endl; //save game
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(3).data() << std::endl; //exit game
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(6).data() << std::endl; //rule
 		}
 		if (gameState_ == GAME_WIN)
 		{
-			std::cout << std::endl << "\t\t\tYOU WIN!!" << std::endl;
-			std::cout << "\t\t\t\\n to start new game" << std::endl;
-			std::cout << "\t\t\t\\e to exit game" << std::endl;
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(7).data() << std::endl; //win
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(0).data() << std::endl; //new game
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(3).data() << std::endl; //exit game
 		}
 		if (gameState_ == GAME_OVER)
 		{
-			std::cout << std::endl << "\t\t\tYOU LOOSE!!" << std::endl;
-			std::cout << "\t\t\t\\n to start new game" << std::endl;
-			std::cout << "\t\t\t\\e to exit game" << std::endl;
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(8).data() << std::endl; //lose
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(0).data() << std::endl; //new game
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(3).data() << std::endl; //exit game
 		}
 		if (gameState_ == GAME_SAVE)
 		{
-			std::cout << std::endl << "\t\t\tSave completed" << std::endl;
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(9).data() << std::endl; //saved
 
 		}
 		if (gameState_ == GAME_LOAD)
 		{
-			std::cout << std::endl << "\t\t\tLoaded the last save" << std::endl;
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(10).data() << std::endl; //loaded
 
 		}
 		if (errorStatus_ == ERROR_INVALID_INPUT)
 		{
-			std::cout << std::endl << "\t\t\tPlease input a-z only" << std::endl;
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(11).data() << std::endl; //only a-z allow
 		}
 		if (errorStatus_ == ERROR_DUPLICATED_INPUT)
 		{
-			std::cout << std::endl << "\t\t\tDuplicated INPUT" << std::endl;
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(12).data() << std::endl; //duplicate input
 		}
 		if (errorStatus_ == ERROR_NOTFOUND)
 		{
-			std::cout << std::endl << "\t\t\tincorrected" << std::endl;
+			std::cout << "\t\t\t" << messageList_.xmlmssglist.at(13).data() << std::endl; //incorrect
 		}
 		if (errorStatus_ == ERROR_NONE)
 		{
@@ -386,8 +428,8 @@ bool Hangman::print(int live)
 			std::cout << std::endl;
 		}
 	}
-	std::cout << theWord << std::endl;
-	//std::cout << std::endl<< "\t\t\t"<<std::endl;
+	//std::cout << theWord << std::endl; //<-- to show the answer
+
 	return true;
 }
 

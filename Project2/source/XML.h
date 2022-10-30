@@ -2,6 +2,8 @@
 #include <string>
 #include <pugixml/pugixml.hpp>
 #include <map>
+#include <vector>
+//#include "Hangman.h"
 
 class XML
 {
@@ -9,20 +11,23 @@ public:
 	XML();
 	~XML();
 	
-	//struct MyMusic
-	//{
-	//	std::string fname;
-	//	std::string path[2];
+	std::map<int , std::string> xmlmssglist;
+	struct saveData
+	{
+		std::string xml_theWord;
+		int xml_gameState_;
+		int xml_errorStatus_;
+		int xml_live_;
+		std::map<size_t, std::string> xml_foundPos;
+		std::map<size_t, std::string> xml_myWord;
+		std::map<std::string, size_t> xml_input_;
+	};
 
-	//	MyMusic();
-	//};
+	bool loadLangSetFromXML(const pugi::char_t* langSet);
+	bool saveState(saveData savedata);
 
-	//MyMusic my_music[3];
-	//std::string my_fx_path[7];
-	//std::map<std::string, pugi::xml_document> mXML_doc_;
-
-	//bool createXMLObj(const std::string& fname);
-	//void readXML(const std::string& fname);
+	bool loadState(saveData* savedata);
 
 };
+
 

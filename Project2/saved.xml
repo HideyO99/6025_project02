@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<saved>
+	<theWord>REFUND</theWord>
+	<gameState_>2</gameState_>
+	<errorStatus_>3</errorStatus_>
+	<live_>8</live_>
+	<foundPos>
+		<key>0<value>R</value>
+		</key>
+		<key>5<value>D</value>
+		</key>
+	</foundPos>
+	<myWord>
+		<key>0<value>R</value>
+		</key>
+		<key>1<value>_</value>
+		</key>
+		<key>2<value>_</value>
+		</key>
+		<key>3<value>_</value>
+		</key>
+		<key>4<value>_</value>
+		</key>
+		<key>5<value>D</value>
+		</key>
+	</myWord>
+	<input_>
+		<key>A<value>0</value>
+		</key>
+		<key>D<value>0</value>
+		</key>
+		<key>R<value>0</value>
+		</key>
+	</input_>
+</saved>
